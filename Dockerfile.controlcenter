@@ -1,0 +1,13 @@
+# Dockerfile.controlcenter
+FROM ghcr.io/vatsim-scandinavia/control-center:v6.3.3
+
+# Theme variables baked at build-time
+# (Add/adjust any other VITE_* you use, e.g. INFO/SUCCESS/DANGER/PUBLIC_URL)
+ENV VITE_THEME_PRIMARY=#13437C \
+    VITE_THEME_SECONDARY=#00ED4F \
+    VITE_THEME_INFO=#90A5C4 \
+    VITE_THEME_SUCCESS=#00ED4F \
+    VITE_THEME_DANGER=#EF4139
+
+# Build theme assets into /var/www/html/public/build
+RUN chmod +x container/theme/build.sh && container/theme/build.sh

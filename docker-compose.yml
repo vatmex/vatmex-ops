@@ -1,0 +1,75 @@
+services:
+  control-center:
+    image: vatmex/control-center-theme:v6.3.3
+#    image: my-cc-themed:v6.2.4   # <- was ghcr.io/vatsim-scandinavia/control-center:v6.2.4
+#    image: ghcr.io/vatsim-scandinavia/control-center:v6.2.4
+    depends_on:
+      db-ready:
+        condition: service_completed_successfully
+    networks:
+      - proxy_default
+      - internal
+    volumes:
+      - ./controlcenter_sessions:/app/storage/framework/sessions
+      - ./controlcenter_logos:/app/public/images/logos
+      - ./controlcenter_files:/app/storage/app/public/files
+    environment:
+      - APP_DEBUG=true
+      - APP_NAME='Training Center'
+      - APP_OWNER_NAME=Vatsim Mexico
+      - APP_OWNER_NAME_SHORT=VATMEX
+      - APP_OWNER_CODE=MCO
+      - APP_URL=https://ops.vatmex.com.mx
+      - APP_MODE=division
+      - DB_HOST=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_DATABASE=test
+      - OAUTH_ID=1529
+      - OAUTH_SECRET=4C3ndP2aeZ5FbmXC9ejuxLB5fRl0mnf7BWuWH9gx
+      - OAUTH_URL="https://auth.vatsim.net"
+      - MAIL_MAILER=smtp
+      - MAIL_HOST=smtp-relay.brevo.com
+      - MAIL_PORT=587
+      - MAIL_USERNAME=gustavo@vatmex.com.mx
+      - MAIL_PASSWORD=5Jgy3xV4wF1IOhqp
+      - MAIL_FROM_NAME=Vatmex Training
+      - MAIL_FROM_ADDRESS=noreply@ops.vatmex.com.mx
+      - VATSIM_CORE_API_TOKEN='c7af1c63-9e79-4898-90e9-f10da0d147ff'
+      - VATSIM_BOOKING_API_URL="https://atc-bookings.vatsim.net/api"
+      - VATSIM_BOOKING_API_TOKEN='93cd1d51fe4af1d0c0625c2ef6d8631c'
+      - APP_LOGO=logo-ops.svg
+      - APP_LOGO_MAIL=logo_mail.png
+      - VITE_THEME_PRIMARY=#13437C
+      - VITE_THEME_SECONDARY=#00ED4F
+      - VITE_THEME_INFO=#90A5C4
+      - VITE_THEME_SUCCESS=#00ED4F
+      - VITE_THEME_DANGER=#EF4139
+  db:
+    image: docker.io/library/mariadb:11
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - internal
+    ports:
+      - 33306:3306
+    environment:
+      MARIADB_DATABASE: test
+      MARIADB_ROOT_PASSWORD: root
+  db-ready:
+    image: atkrad/wait4x
+    command: mysql "root:root@tcp(db)/test" -t 10s -i 500ms
+    networks:
+      - internal
+volumes:
+  controlcenter_logos:
+    driver: local
+  controlcenter_files:
+    driver: local
+  controlcenter_sessions:
+    driver: local
+
+networks:
+  internal:
+  proxy_default:
+    external: true 
