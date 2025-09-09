@@ -1,0 +1,9 @@
+mysql/
+node_modules/
+vendor/
+.env
+*.log
+*.dump
+*.tgz
+opt/backups/
+docker-data/
