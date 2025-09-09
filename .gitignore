@@ -1,9 +1,12 @@
 mysql/
-node_modules/
-vendor/
-.env
+mysql.*/*        # snapshots/folders tipo mysql.2025...
+*.ibd
+*.frm
 *.log
 *.dump
 *.tgz
+node_modules/
+vendor/
+.env
 opt/backups/
 docker-data/
