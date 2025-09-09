@@ -1,5 +1,5 @@
 mysql/
-mysql.*/*        # snapshots/folders tipo mysql.2025...
+mysql.*/*
 *.ibd
 *.frm
 *.log
